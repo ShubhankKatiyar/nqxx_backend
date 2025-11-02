@@ -88,7 +88,9 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// ✅ Start server
+// ✅ Start server (Railway compatible)
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running on http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 NeuQuantix AI Tutor running on port ${PORT}`);
+});
 console.log("🔑 API Key loaded:", !!process.env.OPENAI_API_KEY);
