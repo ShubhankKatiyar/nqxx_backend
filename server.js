@@ -5,7 +5,7 @@
 // and ensures all answers follow the NeuQuantix Learning Model (NLM).
 
 import express from "express";
-//import fetch from "node-fetch";
+import fetch from "node-fetch";
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -89,5 +89,6 @@ app.post("/ask", async (req, res) => {
 });
 
 // ✅ Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running on http://localhost:${PORT}`));
+console.log("🔑 API Key loaded:", !!process.env.OPENAI_API_KEY);
