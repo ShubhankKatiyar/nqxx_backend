@@ -90,6 +90,7 @@ app.post("/ask", async (req, res) => {
 
 // ✅ Start server (Railway compatible)
 const PORT = process.env.PORT || 8080;
+app.get("/", (req, res) => res.send("✅ NeuQuantix Backend is running on Railway!"));
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 NeuQuantix AI Tutor running on port ${PORT}`);
 });
