@@ -18,10 +18,7 @@ askBtn.addEventListener("click", async () => {
     "<span class='loading'>🤔 Thinking deeply using NLM framework...</span>";
 
   try {
-    // const response = await fetch("http://localhost:3000/ask", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ question }),
+    
 
 const response = await fetch("https://nqxxbackend-production.up.railway.app/ask", {
       method: "POST",
