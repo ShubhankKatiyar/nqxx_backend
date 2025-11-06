@@ -4,10 +4,8 @@
 
 import express from "express";
 import fetch from "node-fetch";
-import dotenv from "dotenv";
 import cors from "cors";
 
-dotenv.config();
 const app = express();
 
 // ✅ Enable CORS before everything
@@ -16,9 +14,6 @@ app.use(cors({
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
-
-// ✅ Handle preflight requests explicitly
-app.options("*", cors());
 
 // ✅ Parse JSON body
 app.use(express.json());
