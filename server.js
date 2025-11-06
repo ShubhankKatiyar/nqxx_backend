@@ -80,4 +80,5 @@ app.get("/", (req, res) => {
   res.send("✅ NQXX server is live and running!");
 });
 const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running locally at http://localhost:${PORT}`));
+//app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running locally at http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => console.log(`🚀 NQXX AI Tutor running on port ${PORT}`));
