@@ -1,5 +1,5 @@
 // ------------------------------
-// NeuQuantix AI Tutor Backend (Local Version)
+// NeuQuantix AI Tutor Backend (Fixed for Railway + CORS)
 // ------------------------------
 
 import express from "express";
@@ -9,43 +9,43 @@ import cors from "cors";
 
 dotenv.config();
 const app = express();
-app.use(express.json());
+
+// ✅ Enable CORS before everything
 app.use(cors({
-  origin: ["http://127.0.0.1:5500", "http://localhost:5500", "null"],
-  methods: ["GET", "POST"],
+  origin: "*", // for now allow all, works with local + live frontend
+  methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-// ✅ NeuQuantix Learning Model (NLM) System Prompt
+// ✅ Handle preflight requests explicitly
+app.options("*", cors());
+
+// ✅ Parse JSON body
+app.use(express.json());
+
+// ✅ NeuQuantix Learning Model (NLM) Prompt
 const NLM_PROMPT = `
 You are "NeuQuantix Tutor" — an expert AI educator that always answers using the NeuQuantix Learning Model (NLM).
-
-For every user question, produce a complete and well-structured educational explanation in the following format:
-
-1. **Concept Definition** — Give the actual definition in easy, beginner-friendly language. Mention prerequisite concepts if required.
-2. **Visualization (Text-based)** Provide two short examples:  
-   **2.1 Relatable real-life example.**  
-   **2.2 Real-world topic example.**
-3. **Logic / Derivation**
-4. **Step-by-Step Solution**
-5. **Relation**
-6. **Function / Purpose**
-7. **Examples**
-8. **Common Mistakes**
-9. **Analogy**
-10. **Related Problems (2 problems with hints)**
-11. **Real-World Link**
-12. **Summary / Key Takeaway**
-13. **Extension (Optional)**
+For every user question, produce a structured explanation in this format:
+1. Concept Definition
+2. Visualization (two examples)
+3. Logic / Derivation
+4. Step-by-Step Solution
+5. Relation
+6. Function / Purpose
+7. Examples
+8. Common Mistakes
+9. Analogy
+10. Related Problems (2 with hints)
+11. Real-World Link
+12. Summary / Key Takeaway
+13. Extension (Optional)
 `;
 
-// ✅ API route
+// ✅ API endpoint
 app.post("/ask", async (req, res) => {
   const { question } = req.body;
-
-  if (!question) {
-    return res.status(400).json({ error: "No question provided." });
-  }
+  if (!question) return res.status(400).json({ error: "No question provided." });
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -79,10 +79,11 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// ✅ Local server start
+// ✅ Root check route
 app.get("/", (req, res) => {
   res.send("✅ NQXX server is live and running!");
 });
-const PORT = 3000;
-//app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running locally at http://localhost:${PORT}`));
+
+// ✅ Use dynamic port for Railway
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => console.log(`🚀 NQXX AI Tutor running on port ${PORT}`));
