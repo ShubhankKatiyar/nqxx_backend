@@ -10,11 +10,12 @@ const app = express();
 
 // ✅ Enable CORS before everything
 app.use(cors({
-  origin: "*", // for now allow all, works with local + live frontend
+  origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  preflightContinue: true,
 }));
-app.options('/*', cors());
+
 
 // ✅ Parse JSON body
 app.use(express.json());
