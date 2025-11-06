@@ -4,10 +4,8 @@
 
 import express from "express";
 import fetch from "node-fetch";
-import dotenv from "dotenv";
 import cors from "cors";
 
-dotenv.config();
 const app = express();
 
 // ✅ Enable CORS before everything
@@ -48,6 +46,7 @@ app.post("/ask", async (req, res) => {
   if (!question) return res.status(400).json({ error: "No question provided." });
 
   try {
+    console.log("API Key loaded:", process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 8) + "..." : "Not found");
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
