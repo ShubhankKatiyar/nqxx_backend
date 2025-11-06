@@ -1,8 +1,6 @@
 // ------------------------------
-// NeuQuantix AI Tutor Backend
+// NeuQuantix AI Tutor Backend (Local Version)
 // ------------------------------
-// Secure Express.js backend that connects frontend to OpenAI API
-// and ensures all answers follow the NeuQuantix Learning Model (NLM).
 
 import express from "express";
 import fetch from "node-fetch";
@@ -12,11 +10,7 @@ import cors from "cors";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors(
-     {origin: "*",
-  methods: ["GET","POST"],
-  allowedHeaders: ["Content-Type"],}
-));
+app.use(cors());
 
 // ✅ NeuQuantix Learning Model (NLM) System Prompt
 const NLM_PROMPT = `
@@ -25,9 +19,9 @@ You are "NeuQuantix Tutor" — an expert AI educator that always answers using t
 For every user question, produce a complete and well-structured educational explanation in the following format:
 
 1. **Concept Definition** — Give the actual definition in easy, beginner-friendly language. Mention prerequisite concepts if required.
-2. **Visualization (Text-based)**  Provide two short examples:  
-    **2.1 Relatable real-life example.** 
-    **2.2 Real-world topic example.**
+2. **Visualization (Text-based)** Provide two short examples:  
+   **2.1 Relatable real-life example.**  
+   **2.2 Real-world topic example.**
 3. **Logic / Derivation**
 4. **Step-by-Step Solution**
 5. **Relation**
@@ -39,15 +33,9 @@ For every user question, produce a complete and well-structured educational expl
 11. **Real-World Link**
 12. **Summary / Key Takeaway**
 13. **Extension (Optional)**
-
-Guidelines:
-- Use simple, clear, beginner-friendly language.
-- Keep tone exploratory, educational, and positive.
-- Maintain labeled sections with clear headings.
-- Write as if explaining to a curious 10th-grade student.
 `;
 
-// ✅ Main API route
+// ✅ API route
 app.post("/ask", async (req, res) => {
   const { question } = req.body;
 
@@ -56,21 +44,20 @@ app.post("/ask", async (req, res) => {
   }
 
   try {
-    // Call OpenAI API securely
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: NLM_PROMPT },
-          { role: "user", content: `Question: ${question}` }
+          { role: "user", content: `Question: ${question}` },
         ],
-        temperature: 0.7
-      })
+        temperature: 0.7,
+      }),
     });
 
     const data = await response.json();
@@ -88,10 +75,9 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// ✅ Start server (Railway compatible)
-const PORT = process.env.PORT || 8080;
-app.get("/", (req, res) => res.send("✅ NeuQuantix Backend is running on Railway!"));
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 NeuQuantix AI Tutor running on port ${PORT}`);
+// ✅ Local server start
+app.get("/", (req, res) => {
+  res.send("✅ NQXX server is live and running!");
 });
-console.log("🔑 API Key loaded:", !!process.env.OPENAI_API_KEY);
+const PORT = 3000;
+app.listen(PORT, () => console.log(`🚀 NeuQuantix AI Tutor running locally at http://localhost:${PORT}`));
